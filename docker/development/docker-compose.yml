@@ -1,0 +1,17 @@
+version: '3.7'
+
+services: 
+  frontend:
+    container_name: frontend
+    image: node:12-alpine
+    ports: 
+      - 8000:8000   # Dev server port
+      - 35729:35729 # Livereload port
+    volumes: 
+      - ../../frontend:/app
+      - frontend-node-modules:/app/node_modules
+    command: sh -c "yarn install && yarn dev"
+    working_dir: "/app"
+
+volumes:
+  frontend-node-modules:
