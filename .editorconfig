@@ -1,0 +1,16 @@
+root = true
+
+[*.go]
+indent_size = 2
+indent_style = tab
+
+[*.{css,js,json,svelte}]
+indent_size = 2
+indent_style = space
+insert_final_newline = false
+
+[*.html]
+indent_size = 2
+indent_style = space
+insert_final_newline = false
+
