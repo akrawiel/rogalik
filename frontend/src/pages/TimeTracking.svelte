@@ -1,13 +1,3 @@
-<script>
-  import MoleculeTimeEntry from "../molecules/TimeEntry.svelte";
+<div>Time tracking</div>
 
-  let value = "";
-
-  const handleInput = (event) => {
-    value = event.target.value;
-  };
-</script>
-
-<div>
-  <MoleculeTimeEntry {value} on:change={handleInput} />
-</div>
+<a href="/sign-out">Sign out</a>

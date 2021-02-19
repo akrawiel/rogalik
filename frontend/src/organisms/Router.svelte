@@ -1,20 +1,7 @@
 <script>
-  import page from "page";
+  import page from 'page';
 
-  const paths = [
-    {
-      path: "/",
-      component: () => import("../pages/TimeTracking.svelte"),
-    },
-    {
-      path: "/reports",
-      component: () => import("../pages/Reports.svelte"),
-    },
-    {
-      path: "/settings",
-      component: () => import("../pages/Settings.svelte"),
-    },
-  ];
+  export let paths = [];
 
   let currentPage = null;
 
@@ -30,12 +17,12 @@
 </script>
 
 <style lang="scss">
-  .o-routerView {
+  .o-router {
     flex: 1;
   }
 </style>
 
-<div class="o-routerView">
+<div class="o-router">
   {#if currentPage}
     {#await currentPage.component()}
       <div>Loading...</div>

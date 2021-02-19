@@ -1,8 +1,11 @@
 module.exports = {
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2020,
     sourceType: 'module',
   },
+  extends: [
+    'airbnb-base',
+  ],
   env: {
     es6: true,
     browser: true,
@@ -10,17 +13,22 @@ module.exports = {
   plugins: [
     'svelte3',
   ],
-  extends: 'airbnb-base',
   overrides: [
     {
-      files: ['*.svelte'],
+      files: ['**/*.svelte'],
       processor: 'svelte3/svelte3',
       rules: {
         'import/first': 'off',
         'import/no-duplicates': 'off',
         'import/no-mutable-exports': 'off',
         'import/no-unresolved': 'off',
+        'import/prefer-default-export': 'off',
       },
     },
   ],
+  rules: {
+  },
+  settings: {
+    // ...
+  },
 };
