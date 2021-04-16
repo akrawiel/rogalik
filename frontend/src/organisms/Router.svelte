@@ -1,15 +1,15 @@
 <script>
   import page from 'page';
 
-  export let paths = [];
+  export let routes = [];
 
   let currentPage = null;
 
   const registerPath = ({ pathname }) => {
-    currentPage = paths.find(({ path }) => path === pathname) ?? null;
+    currentPage = routes.find(({ path }) => path === pathname) ?? null;
   };
 
-  paths.forEach(({ path }) => {
+  routes.forEach(({ path }) => {
     page(path, registerPath);
   });
 

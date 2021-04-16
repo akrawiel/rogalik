@@ -14,19 +14,19 @@ services:
       - 8000:8000
 
   backend:
-    image: strapi/strapi:3.5.0-alpine
-    volumes:
-      - backend_node_modules:/srv/app/node_modules
+    build:
+      context: ../../api
+      dockerfile: ../docker/development/backend/Dockerfile
     environment:
-      DATABASE_CLIENT: postgres
-      DATABASE_NAME: rogalik
-      DATABASE_PORT: 5432
-      DATABASE_HOST: database
-      DATABASE_USERNAME: rogalikuser
-      DATABASE_PASSWORD: rogaliksecret
+      DATABASE_URL: postgres://rogalikuser:rogaliksecret@database/database:5432
+      ROCKET_DATABASES: '{diesel={url="postgres://rogalikuser:rogaliksecret@database/database:5432"}}'
+    volumes:
+      - ../../api:/app
+    links:
+      - database
     ports:
-      - 9000:1337
-      - 1337:1337
+      - 9000:9000
+    command: bash -c "./tools/wait-for-it.sh database:5432 -q -- diesel setup && cargo watch -x run"
 
   database:
     image: postgres:13-alpine
@@ -41,6 +41,5 @@ services:
 
 volumes:
   frontend_node_modules:
-  backend_node_modules:
   database_data:
 

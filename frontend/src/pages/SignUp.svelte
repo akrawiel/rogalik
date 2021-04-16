@@ -3,7 +3,7 @@
 
   import { signUp } from '@/store/auth';
 
-  let form = {
+  const form = {
     email: '',
     username: '',
     password: '',

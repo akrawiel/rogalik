@@ -29,6 +29,13 @@ module.exports = {
   rules: {
   },
   settings: {
-    // ...
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@', './src'],
+        ],
+        extensions: ['.js', '.svelte', '.json'],
+      },
+    },
   },
 };
