@@ -1,5 +1,9 @@
 :8000
 
-reverse_proxy /api/* api:8000
+encode zstd gzip
+
+handle_path /api/* {
+  reverse_proxy backend:9000
+}
 
 reverse_proxy * frontend:8000

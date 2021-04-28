@@ -5,6 +5,7 @@ authors = ["Aleksander Krawiel <aleksander.krawiel@makimo.pl>"]
 edition = "2018"
 
 [dependencies]
+blake3 = "0.3.7"
 rogalik_db = { version = "0.1.0", path = "../rogalik_db" }
 rocket = "0.4.7"
 

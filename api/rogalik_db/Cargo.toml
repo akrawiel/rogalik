@@ -5,6 +5,7 @@ authors = ["Aleksander Krawiel <aleksander.krawiel@makimo.pl>"]
 edition = "2018"
 
 [dependencies]
+blake3 = "0.3.7"
 diesel = { version = "1.4.6", features = ["postgres", "uuid"] }
 diesel_migrations = "1.4.0"
 postgres = { version = "0.19.1", features = ["with-uuid-0_8"] }

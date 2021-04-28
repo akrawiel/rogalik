@@ -1,8 +1,9 @@
 extern crate uuid;
 
+use crate::schema::users;
 use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Deserialize, Serialize)]
+#[derive(Identifiable, Queryable, Deserialize, Serialize)]
 pub struct User {
     pub id: uuid::Uuid,
     pub email: String,
@@ -10,9 +11,21 @@ pub struct User {
     pub last_name: String,
 }
 
-#[derive(Queryable, Deserialize, Serialize)]
-pub struct UserWithoutId {
+#[derive(Identifiable, QueryableByName, Deserialize, Serialize)]
+#[table_name = "users"]
+pub struct FullUser {
+    pub id: uuid::Uuid,
     pub email: String,
     pub first_name: String,
     pub last_name: String,
+    pub password: String,
+}
+
+#[derive(Insertable, Deserialize, Serialize)]
+#[table_name = "users"]
+pub struct NewUser {
+    pub email: String,
+    pub first_name: String,
+    pub last_name: String,
+    pub password: String,
 }
