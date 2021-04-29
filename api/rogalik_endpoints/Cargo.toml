@@ -8,6 +8,7 @@ edition = "2018"
 blake3 = "0.3.7"
 rogalik_db = { version = "0.1.0", path = "../rogalik_db" }
 rocket = "0.4.7"
+uuid = { version = "0.6.5", features = ["serde", "v4"] }
 
 [dependencies.rocket_contrib]
 version = "0.4.7"
