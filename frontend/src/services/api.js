@@ -1,10 +1,6 @@
 import redaxios from 'redaxios';
 
-export const api = redaxios.create({
+export default redaxios.create({
   baseURL: import.meta.env.SNOWPACK_PUBLIC_BASE_URL,
   withCredentials: true,
-});
-
-export const publicApi = redaxios.create({
-  baseURL: import.meta.env.SNOWPACK_PUBLIC_BASE_URL,
 });
