@@ -5,7 +5,8 @@
   import { signOut } from '@/store/auth';
 
   onMount(() => {
-    signOut();
-    page('/sign-in');
+    signOut().finally(() => {
+      page('/sign-in');
+    });
   });
 </script>

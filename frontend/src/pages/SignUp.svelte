@@ -5,7 +5,8 @@
 
   const form = {
     email: '',
-    username: '',
+    firstName: '',
+    lastName: '',
     password: '',
   };
 
@@ -19,19 +20,28 @@
 <form on:submit|preventDefault={onSubmit}>
   <input
     type="email"
-    name="username"
-    placeholder="Username"
-    bind:value={form.email} />
+    name="email"
+    placeholder="E-mail address"
+    bind:value={form.email}
+  />
   <input
     type="text"
-    name="username"
-    placeholder="Username"
-    bind:value={form.username} />
+    name="firstName"
+    placeholder="First name"
+    bind:value={form.firstName}
+  />
+  <input
+    type="text"
+    name="lastName"
+    placeholder="Last name"
+    bind:value={form.lastName}
+  />
   <input
     type="password"
     name="password"
     placeholder="Password"
-    bind:value={form.password} />
+    bind:value={form.password}
+  />
   <button type="submit">Sign up</button>
 </form>
 

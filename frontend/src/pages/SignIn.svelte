@@ -1,31 +1,35 @@
 <script>
   import page from 'page';
 
-  import { signIn } from '@/store/auth';
+  import { fetchProfile, signIn } from '@/store/auth';
 
   const form = {
-    username: '',
+    email: '',
     password: '',
   };
 
-  function onSubmit() {
-    signIn({ ...form }).then(() => {
-      page('/');
-    });
+  async function onSubmit() {
+    await signIn({ ...form });
+
+    await fetchProfile();
+
+    page('/');
   }
 </script>
 
 <form on:submit|preventDefault={onSubmit}>
   <input
-    type="text"
-    name="username"
-    placeholder="Username"
-    bind:value={form.username} />
+    type="email"
+    name="email"
+    placeholder="E-mail address"
+    bind:value={form.email}
+  />
   <input
     type="password"
     name="password"
     placeholder="Password"
-    bind:value={form.password} />
+    bind:value={form.password}
+  />
   <button type="submit">Sign in</button>
 </form>
 
