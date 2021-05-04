@@ -17,12 +17,12 @@
 </script>
 
 <style lang="scss">
-  .o-router {
+  .router {
     flex: 1;
   }
 </style>
 
-<div class="o-router">
+<div class="router">
   {#if currentPage}
     {#await currentPage.component()}
       <div>Loading...</div>
