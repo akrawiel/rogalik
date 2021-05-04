@@ -1,62 +1,61 @@
-import { createEffect, createEvent, createStore } from 'effector';
-import localforage from 'localforage';
+import { createEffect, createStore } from 'effector';
 
-import { publicApi } from '@/services/api';
+import api from '@/services/api';
 
-export const initializeAuth = createEffect(async () => {
-  const [jwt, user] = await Promise.all([
-    localforage.getItem('jwt'),
-    localforage.getItem('user'),
-  ]);
-
-  return {
-    jwt, user,
-  };
-});
-
-export const signIn = createEffect(async ({ username, password }) => {
-  const response = await publicApi.post('/auth/local', { identifier: username, password });
+export const fetchProfile = createEffect(async () => {
+  const response = await api.get('/auth/me');
 
   return response.data;
 });
 
-export const signOut = createEvent();
+export const signIn = createEffect(async ({ email, password }) => {
+  const response = await api.post('/auth/sign-in', { email, password });
 
-export const signUp = createEffect(async ({ username, email, password }) => {
-  const response = await publicApi.post('/auth/local/register', { username, email, password });
+  return response.data;
+});
+
+export const signOut = createEffect(async () => {
+  const response = await api.get('/auth/sign-out');
+
+  return response.data;
+});
+
+export const signUp = createEffect(async ({
+  firstName, lastName, email, password,
+}) => {
+  const response = await api.post('/auth/sign-up', {
+    email,
+    first_name: firstName,
+    last_name: lastName,
+    password,
+  });
 
   return response.data;
 });
 
 function createAuth() {
   const store = createStore({
-    jwt: null,
     user: null,
-    ready: false,
+    error: null,
   });
 
-  store.on(initializeAuth.doneData, (_, { jwt, user }) => ({
-    jwt,
+  store.on([fetchProfile.doneData, signUp.doneData], (state, user) => ({
+    ...state,
     user,
-    ready: true,
+    error: null,
   }));
 
-  store.on([signIn.doneData, signUp.doneData], (state, { jwt, user }) => ({
+  store.on(fetchProfile.failData, (state, error) => ({
     ...state,
-    jwt,
-    user,
-  }));
-
-  store.on(signOut, (state) => ({
-    ...state,
-    jwt: null,
     user: null,
+    error,
   }));
 
-  store.watch(({ jwt, user }) => {
-    localforage.setItem('jwt', jwt);
-    localforage.setItem('user', user);
-  });
+  store.on(signOut.doneData, (state) => ({
+    ...state,
+    user: null,
+    error: null,
+  }));
 
   return store;
 }
