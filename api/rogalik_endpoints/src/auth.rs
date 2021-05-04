@@ -28,16 +28,18 @@ fn sign_up(
         return Custom(Status::BadRequest, Err("Invalid data provided"));
     }
 
-    let mut parsed_user = new_user.unwrap().into_inner();
+    let parsed_user = new_user.unwrap().into_inner();
 
-    let hashed_password = blake3::hash(parsed_user.password.as_bytes());
+    let user_with_hashed_password = NewUser {
+        password: blake3::hash(parsed_user.password.as_bytes())
+            .to_hex()
+            .as_str()
+            .to_owned(),
+        ..parsed_user
+    };
 
-    parsed_user.password = hashed_password.to_hex().as_str().to_owned();
-
-    let mut created_user_option: Option<User> = None;
-
-    let response: Custom<Result<Json<User>, &'static str>> = diesel::insert_into(users::table)
-        .values(&parsed_user)
+    diesel::insert_into(users::table)
+        .values(&user_with_hashed_password)
         .returning((users::id, users::email, users::first_name, users::last_name))
         .get_result(&*conn)
         .map_or_else(
@@ -51,16 +53,10 @@ fn sign_up(
                 ),
             },
             |created_user: User| {
-                created_user_option = Some(created_user.clone());
+                cookies.add_private(Cookie::new("user_id", created_user.id.urn().to_string()));
                 Custom(Status::Created, Ok(Json(created_user)))
             },
-        );
-
-    if let Some(created_user) = created_user_option {
-        cookies.add_private(Cookie::new("user_id", created_user.id.urn().to_string()))
-    }
-
-    response
+        )
 }
 
 #[post("/sign-in", format = "application/json", data = "<login_user>")]
@@ -110,7 +106,7 @@ fn sign_in(
     Custom(Status::Ok, "Logged in")
 }
 
-#[post("/sign-out", format = "application/json")]
+#[get("/sign-out", format = "application/json")]
 fn sign_out(mut cookies: Cookies) -> Custom<&'static str> {
     if cookies.get_private("user_id").is_some() {
         cookies.remove_private(Cookie::named("user_id"));

@@ -3,7 +3,7 @@ extern crate uuid;
 use crate::schema::users;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Identifiable, Queryable, Deserialize, Serialize)]
+#[derive(Identifiable, Queryable, Deserialize, Serialize)]
 #[table_name = "users"]
 pub struct User {
     pub id: uuid::Uuid,
