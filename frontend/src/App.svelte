@@ -4,27 +4,28 @@
 
   import routes from '@/config/routes';
   import Router from '@/organisms/Router.svelte';
-  import auth, { initializeAuth } from '@/store/auth';
+  import { fetchProfile } from '@/store/auth';
 
   onMount(() => {
-    initializeAuth().then(() => {
-      const currentPageRegex = new RegExp(`^${window.location.pathname}$`);
+    const currentPageRegex = new RegExp(`^${window.location.pathname}$`);
 
-      const currentPage = routes.find(({ path }) =>
-        currentPageRegex.test(path)
-      );
+    const currentPage = routes.find(({ path }) => currentPageRegex.test(path));
 
-      if (!$auth.jwt && !currentPage?.auth) {
-        page('/sign-in');
-      }
-    });
+    const currentPageRequiresAuth =
+      currentPage?.required?.includes('auth') ?? false;
+
+    fetchProfile()
+      .then(() => {
+        if (!currentPageRequiresAuth) {
+          page('/');
+        }
+      })
+      .catch(() => {
+        if (currentPageRequiresAuth) {
+          page('/sign-in');
+        }
+      });
   });
-
-  $: ready = $auth.ready;
 </script>
 
-{#if ready}
-  <Router {routes} />
-{:else}
-  <div>Loading...</div>
-{/if}
+<Router {routes} />

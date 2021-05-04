@@ -2,28 +2,28 @@ export default [
   {
     path: '/',
     component: () => import('@/pages/TimeTracking.svelte'),
+    required: ['auth'],
   },
   {
     path: '/reports',
     component: () => import('@/pages/Reports.svelte'),
+    required: ['auth'],
   },
   {
     path: '/settings',
     component: () => import('@/pages/Settings.svelte'),
+    required: ['auth'],
   },
   {
     path: '/sign-in',
-    auth: true,
     component: () => import('@/pages/SignIn.svelte'),
   },
   {
     path: '/sign-up',
-    auth: true,
     component: () => import('@/pages/SignUp.svelte'),
   },
   {
     path: '/sign-out',
-    auth: true,
     component: () => import('@/pages/SignOut.svelte'),
   },
 ];
