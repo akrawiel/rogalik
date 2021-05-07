@@ -1,11 +1,19 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
+
 module.exports = {
   mount: {
     public: '/',
     src: '/dist',
   },
   plugins: [
-    '@snowpack/plugin-svelte',
+    ['@snowpack/plugin-svelte',
+      {
+        preprocess: require('svelte-windicss-preprocess').preprocess({
+          compile: true,
+          prefix: 'rogal-'
+        })
+      },
+    ],
     '@snowpack/plugin-dotenv',
     ['@snowpack/plugin-run-script', {
       cmd: 'eslint src --ext .js,jsx,.ts,.tsx,.svelte',

@@ -75,13 +75,7 @@ fn sign_in(
 
     let found_user: Result<FullUser, Error> = users::table
         .filter(users::email.eq(&login_user_unwrapped.email))
-        .select((
-            users::id,
-            users::email,
-            users::first_name,
-            users::last_name,
-            users::password,
-        ))
+        .select(users::all_columns)
         .first(&*conn);
 
     if found_user.is_err() {

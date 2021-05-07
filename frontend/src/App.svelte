@@ -11,8 +11,7 @@
 
     const currentPage = routes.find(({ path }) => currentPageRegex.test(path));
 
-    const currentPageRequiresAuth =
-      currentPage?.required?.includes('auth') ?? false;
+    const currentPageRequiresAuth = currentPage?.required?.includes('auth') ?? false;
 
     fetchProfile()
       .then(() => {

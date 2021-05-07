@@ -1,7 +1,7 @@
 export default [
   {
     path: '/',
-    component: () => import('@/pages/TimeTracking.svelte'),
+    component: () => import('@/pages/TimeTracking/TimeTracking.svelte'),
     required: ['auth'],
   },
   {
