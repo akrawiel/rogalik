@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import page from 'page';
   import { onMount } from 'svelte';
 
@@ -11,7 +11,8 @@
 
     const currentPage = routes.find(({ path }) => currentPageRegex.test(path));
 
-    const currentPageRequiresAuth = currentPage?.required?.includes('auth') ?? false;
+    const currentPageRequiresAuth =
+      currentPage?.required?.includes('auth') ?? false;
 
     fetchProfile()
       .then(() => {
@@ -28,3 +29,6 @@
 </script>
 
 <Router {routes} />
+
+<style windi:preflights:global windi:safelist:global>
+</style>

@@ -1,4 +1,10 @@
-export default [
+import { SvelteComponent } from 'svelte/internal';
+
+const routes: {
+  path: string
+  required?: string[]
+  component: () => Promise<SvelteComponent>
+}[] = [
   {
     path: '/',
     component: () => import('@/pages/TimeTracking/TimeTracking.svelte'),
@@ -27,3 +33,5 @@ export default [
     component: () => import('@/pages/SignOut.svelte'),
   },
 ];
+
+export default routes;

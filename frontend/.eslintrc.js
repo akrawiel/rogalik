@@ -1,10 +1,15 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
+    extraFileExtensions: ['.svelte'],
+    project: './tsconfig.json'
   },
   extends: [
-    'airbnb-base',
+    'airbnb-typescript/base',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   env: {
     es6: true,
@@ -37,5 +42,6 @@ module.exports = {
         extensions: ['.js', '.svelte', '.json'],
       },
     },
+    'svelte3/typescript': true,
   },
 };
