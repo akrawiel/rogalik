@@ -6,14 +6,15 @@ import { SvelteComponent } from 'svelte/internal';
 import App from './App.svelte';
 
 const app: SvelteComponent = new App({
-  target: document.querySelector('main'),
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  target: document.querySelector('main')!,
 });
 
 interface HmrMeta extends ImportMeta {
   hot: {
     accept: () => void;
     dispose: (disposeHandler: () => void) => void;
-  }
+  };
 }
 
 const hmrMeta: HmrMeta = import.meta as HmrMeta;

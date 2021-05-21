@@ -8,7 +8,7 @@
 
 <style>
   button {
-    @apply bg-primary focus:bg-primary-dark border-0 cursor-pointer rounded-full
+    @apply bg-primary active:bg-primary-dark border-0 cursor-pointer rounded-full
       p-2 outline-none focus:outline-none shadow-md;
   }
 

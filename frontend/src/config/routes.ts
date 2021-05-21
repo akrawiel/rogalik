@@ -1,10 +1,12 @@
-import { SvelteComponent } from 'svelte/internal';
+import { SvelteComponentDev } from 'svelte/internal';
 
-const routes: {
-  path: string
-  required?: string[]
-  component: () => Promise<SvelteComponent>
-}[] = [
+export interface Route {
+  path: string;
+  required?: string[];
+  component: () => Promise<{ default: typeof SvelteComponentDev }>;
+}
+
+const routes: Route[] = [
   {
     path: '/',
     component: () => import('@/pages/TimeTracking/TimeTracking.svelte'),

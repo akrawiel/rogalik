@@ -4,16 +4,19 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
     extraFileExtensions: ['.svelte'],
-    project: './tsconfig.json'
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname
   },
   extends: [
     'airbnb-typescript/base',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:prettier/recommended'
   ],
   env: {
     es6: true,
     browser: true,
+    node: true
   },
   plugins: [
     'svelte3',
@@ -28,11 +31,10 @@ module.exports = {
         'import/no-mutable-exports': 'off',
         'import/no-unresolved': 'off',
         'import/prefer-default-export': 'off',
+        'prettier/prettier': 'off'
       },
     },
   ],
-  rules: {
-  },
   settings: {
     'import/resolver': {
       alias: {
@@ -43,5 +45,6 @@ module.exports = {
       },
     },
     'svelte3/typescript': true,
+    'svelte3/ignore-styles': () => true
   },
 };

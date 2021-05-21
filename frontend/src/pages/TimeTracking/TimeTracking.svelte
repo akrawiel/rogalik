@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import RoundButton from '@/atoms/RoundButton.svelte';
   import PlayIcon from '@/icons/PlayIcon.svelte';
 
@@ -8,7 +8,7 @@
 </script>
 
 <div>Time tracking</div>
-<RoundButton on:click={log} size="xd">
+<RoundButton on:click={log} size="md">
   <PlayIcon />
 </RoundButton>
 

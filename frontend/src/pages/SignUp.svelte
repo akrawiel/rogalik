@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import page from 'page';
 
   import { signUp } from '@/store/auth';
@@ -11,7 +11,7 @@
   };
 
   function onSubmit() {
-    signUp({ ...form }).then(() => {
+    signUp({ ...form }).finally(() => {
       page('/');
     });
   }
