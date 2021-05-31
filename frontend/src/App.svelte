@@ -31,4 +31,14 @@
 <Router {routes} />
 
 <style windi:preflights:global windi:safelist:global>
+  :global(main) {
+    @apply bg-hex-eeeeee;
+    height: 100%;
+    width: 100%;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+    overflow: visible;
+  }
 </style>

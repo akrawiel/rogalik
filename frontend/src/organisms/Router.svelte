@@ -1,6 +1,8 @@
 <script lang="ts">
+  /* eslint-disable @typescript-eslint/no-unsafe-call */
+
   import page from 'page';
-  import { Route } from '@/config/routes';
+  import type { Route } from '@/config/routes';
 
   export let routes: Route[] = [];
 
@@ -29,6 +31,6 @@
 
 <style lang="scss">
   .router {
-    flex: 1;
+    @apply flex-1 h-full w-full;
   }
 </style>

@@ -1,5 +1,8 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 
+const { preprocess: windi } = require('svelte-windicss-preprocess')
+const sveltePreprocess = require('svelte-preprocess')
+
 module.exports = {
   mount: {
     public: '/',
@@ -8,12 +11,15 @@ module.exports = {
   plugins: [
     ['@snowpack/plugin-svelte', {
       preprocess: [
-        require('svelte-windicss-preprocess').preprocess(),
-        require('svelte-preprocess')(),
+        sveltePreprocess({}),
+        windi({})
       ],
     }],
     '@snowpack/plugin-typescript',
     '@snowpack/plugin-dotenv',
+    ['@snowpack/plugin-sass', {
+      native: true,
+    }],
     '@snowpack/plugin-postcss',
     ['@snowpack/plugin-run-script', {
       cmd: 'eslint src --ext .js,jsx,.ts,.tsx,.svelte',

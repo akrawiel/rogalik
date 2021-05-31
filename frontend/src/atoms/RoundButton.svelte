@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let size: 'md' | 'lg' | 'xl' = 'md';
+  export let size: 'md' | 'lg' | 'xl' | 'xxl' = 'md';
 </script>
 
 <button on:click class={size}>
@@ -22,5 +22,9 @@
 
   button.xl {
     @apply w-24 h-24;
+  }
+
+  button.xxl {
+    @apply w-32 h-32;
   }
 </style>

@@ -1,0 +1,26 @@
+@use "sass:math";
+
+.buttonContainer {
+  @apply absolute top-1/2 left-1/2;
+}
+
+.tasksContainer {
+  @apply absolute transform top-1/2 left-1/2;
+}
+
+$max-index: 5;
+$degree-margin: 10;
+$radius: 15rem;
+
+$slope: math.div(90 + 2 * $degree-margin, 1 - $max-index);
+
+@for $index from 1 through $max-index {
+  .taskButtonContainer.task#{$index} {
+    @apply absolute;
+    $angle: $slope * $index * 1deg - $slope * $max-index - $degree-margin;
+    transform: translate(
+      calc(#{$radius} * #{math.cos($angle)} - 50%),
+      calc(#{$radius} * #{math.sin($angle)} - 50%)
+    );
+  }
+}
