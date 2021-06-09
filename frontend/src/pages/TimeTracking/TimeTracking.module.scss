@@ -1,7 +1,14 @@
 @use "sass:math";
 
 .buttonContainer {
-  @apply absolute top-1/2 left-1/2;
+  @apply absolute; 
+
+  left: 5rem;
+  top: calc(50% - 5rem);
+
+  @screen sm {
+    @apply top-1/2 left-1/2;
+  }
 }
 
 .tasksContainer {
@@ -11,6 +18,7 @@
 $max-index: 5;
 $degree-margin: 10;
 $radius: 15rem;
+$radius-small: 12rem;
 
 $slope: math.div(90 + 2 * $degree-margin, 1 - $max-index);
 
@@ -19,8 +27,15 @@ $slope: math.div(90 + 2 * $degree-margin, 1 - $max-index);
     @apply absolute;
     $angle: $slope * $index * 1deg - $slope * $max-index - $degree-margin;
     transform: translate(
-      calc(#{$radius} * #{math.cos($angle)} - 50%),
-      calc(#{$radius} * #{math.sin($angle)} - 50%)
+      calc(#{$radius-small} * #{math.cos($angle)} - 50%),
+      calc(#{$radius-small} * #{math.sin($angle)} - 50%)
     );
+
+    @screen sm {
+      transform: translate(
+        calc(#{$radius} * #{math.cos($angle)} - 50%),
+        calc(#{$radius} * #{math.sin($angle)} - 50%)
+      );
+    }
   }
 }

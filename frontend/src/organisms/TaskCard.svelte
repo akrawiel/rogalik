@@ -104,7 +104,7 @@
   }
 
   .card:hover:not(.open) {
-    width: 20rem;
+    width: 12rem;
   }
 
   .card {
