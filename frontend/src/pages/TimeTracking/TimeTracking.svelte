@@ -8,8 +8,8 @@
 
   import styles from './TimeTracking.module.scss';
 
-  let mainCanvas: HTMLDivElement | undefined;
   let innerCanvas: HTMLDivElement | undefined;
+  let mainCanvas: HTMLDivElement | undefined;
 
   function isValidTaskButtonClass(
     taskButtonClass: string
@@ -42,14 +42,14 @@
   }
 
   $: if (innerCanvas) {
+    innerCanvas.style.opacity = '1';
     innerCanvas.style.transform = $trackingCanvasState
       ? 'translate(-50%, -50%) scale(1)'
       : 'translate(-50%, -50%) scale(0.75)';
   }
 </script>
 
-<div class="relative h-full overflow-hidden">
-  <a href="/sign-out">Sign out</a>
+<div class="relative w-full h-full overflow-hidden">
   <div class="absolute w-full h-full main-canvas" bind:this={mainCanvas}>
     <div
       class={clsx(styles.buttonContainer, 'inner-canvas')}
@@ -70,6 +70,9 @@
       </div>
     </div>
   </div>
+  <div class="absolute w-full top-0 left-0">
+    <a href="/sign-out">Sign out</a>
+  </div>
 </div>
 
 <style lang="scss">
@@ -79,7 +82,8 @@
   }
 
   .inner-canvas {
-    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
     transition: all 0.25s ease-out;
   }
 </style>

@@ -3,19 +3,21 @@
   import { nanoid } from 'nanoid';
 
   import RoundButton from '@/atoms/RoundButton.svelte';
+  import CloseIcon from '@/icons/CloseIcon.svelte';
   import PlayIcon from '@/icons/PlayIcon.svelte';
   import trackingCanvasState, {
     onCardClose,
     onCardOpen,
   } from '@/store/trackingCanvas';
   import type { OpenCardData } from '@/store/trackingCanvas';
-  import { onMount } from 'svelte';
 
   export let containerClass: string;
 
   let isOpen = false;
   let cardElement: HTMLDivElement | undefined;
+  let cardContainerElement: HTMLDivElement | undefined;
   let cardData: OpenCardData | undefined;
+  let dummyCardElement: HTMLDivElement | undefined;
 
   function toggleIsOpen() {
     if (!cardElement) return;
@@ -29,17 +31,38 @@
     }
   }
 
-  onMount(() => {
-    if (cardElement) {
-      const boundingClientRect = cardElement.getBoundingClientRect();
+  function startTask() {
+    console.info('Task started');
+  }
 
-      cardData = {
-        cardId: nanoid(),
-        top: boundingClientRect.top + 12 * 16,
-        left: boundingClientRect.left + 8 * 16,
-      };
+  function onRightClick() {
+    if (!isOpen) {
+      toggleIsOpen();
     }
-  });
+  }
+
+  function onClick() {
+    if (isOpen) {
+      toggleIsOpen();
+    } else {
+      startTask();
+    }
+  }
+
+  $: if (cardElement && cardContainerElement && dummyCardElement) {
+    const boundingClientRect = cardElement.getBoundingClientRect();
+
+    const dummyCardWidth =
+      parseInt(getComputedStyle(dummyCardElement).width, 10) || 0;
+    const dummyCardHeight =
+      parseInt(getComputedStyle(dummyCardElement).height, 10) || 0;
+
+    cardData = {
+      cardId: nanoid(),
+      top: boundingClientRect.top + dummyCardHeight / 2,
+      left: boundingClientRect.left + dummyCardWidth / 2,
+    };
+  }
 
   $: if (
     $trackingCanvasState?.cardId &&
@@ -49,11 +72,14 @@
   }
 </script>
 
-<div class={clsx(containerClass, 'card-container', isOpen ? 'open' : '')}>
+<div
+  bind:this={cardContainerElement}
+  class={clsx(containerClass, 'card-container', isOpen ? 'open' : '')}
+>
   <div bind:this={cardElement} class={clsx('card', isOpen ? 'open' : '')}>
     <div class={clsx('button-container', isOpen ? 'open' : '')}>
-      <RoundButton on:click={toggleIsOpen} size="lg">
-        <PlayIcon />
+      <RoundButton on:click={onClick} on:contextmenu={onRightClick} size="lg">
+        <svelte:component this={isOpen ? CloseIcon : PlayIcon} />
       </RoundButton>
     </div>
     <div class="card-header">
@@ -62,6 +88,8 @@
     <div class="p-4">Here be task description</div>
   </div>
 </div>
+
+<div class="card open dummy" bind:this={dummyCardElement} />
 
 <style lang="scss">
   .card-container {
@@ -74,7 +102,7 @@
   }
 
   .card:hover:not(.open) {
-    width: 16rem;
+    width: 20rem;
   }
 
   .card {
@@ -90,8 +118,12 @@
 
     &.open {
       @apply shadow-md;
-      height: 24rem;
-      width: 16rem;
+      height: 32rem;
+      width: 20rem;
+    }
+
+    &.dummy {
+      @apply hidden shadow-none;
     }
   }
 

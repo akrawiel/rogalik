@@ -2,14 +2,14 @@
   export let size: 'md' | 'lg' | 'xl' | 'xxl' = 'md';
 </script>
 
-<button on:click class={size}>
+<button on:click|preventDefault class={size} on:contextmenu|preventDefault>
   <slot />
 </button>
 
 <style>
   button {
     @apply bg-primary active:bg-primary-dark border-0 cursor-pointer rounded-full
-      p-2 outline-none focus:outline-none shadow-md;
+      p-2 outline-none focus:outline-none shadow-md select-none;
   }
 
   button.md {
