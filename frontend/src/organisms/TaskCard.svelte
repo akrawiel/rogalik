@@ -10,8 +10,10 @@
     onCardOpen,
   } from '@/store/trackingCanvas';
   import type { OpenCardData } from '@/store/trackingCanvas';
+  import type { Task } from '@/models/Task';
 
   export let containerClass: string;
+  export let task: Task;
 
   let isOpen = false;
   let cardElement: HTMLDivElement | undefined;
@@ -83,9 +85,9 @@
       </RoundButton>
     </div>
     <div class="card-header">
-      <div class="flex items-center p-2 h-full">Task header</div>
+      <div class="flex items-center p-2 h-full">{task.name}</div>
     </div>
-    <div class="p-4">Here be task description</div>
+    <div class="p-4">{task.description ?? 'No description available'}</div>
   </div>
 </div>
 

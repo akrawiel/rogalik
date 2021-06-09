@@ -25,7 +25,37 @@
       : '';
   }
 
-  const tasks = [1, 2, 3, 4, 5];
+  const tasks = [
+    {
+      id: '60dc9cad-d4cb-4d09-a6fa-f6c0ce793942',
+      name: 'vel',
+      description:
+        'molestie hendrerit at vulputate vitae nisl aenean lectus pellentesque eget nunc donec quis orci eget',
+      assigneeId: '2b2cb860-aab5-48f3-b73f-8a0c48f865d1',
+    },
+    {
+      id: '6fbe8929-24e3-46fe-be2d-860fe90f5670',
+      name: 'tristique',
+    },
+    {
+      id: '8dcf64e9-98a1-4188-a75b-83f27cf95ddb',
+      name: 'nunc viverra dapibus',
+      description:
+        'interdum venenatis turpis enim blandit mi in porttitor pede justo eu massa donec dapibus duis at velit eu',
+      assigneeId: 'ebab3e42-9ba1-4418-a67a-5fd242f38550',
+    },
+    {
+      id: '36dded23-1a91-4e2c-bc72-b5f906c766fe',
+      name: 'magna',
+      description:
+        'sem sed sagittis nam congue risus semper porta volutpat quam pede lobortis ligula sit amet',
+      assigneeId: '47a5be7e-d011-434e-99a9-78c20fc24694',
+    },
+    {
+      id: 'c600f382-f55a-4efd-91cf-0868ce136318',
+      name: 'non sodales',
+    },
+  ];
 
   $: if (mainCanvas) {
     const mainCanvasBoundingRect = mainCanvas.getBoundingClientRect();
@@ -65,6 +95,7 @@
               getTaskButtonClassForIndex(taskIndex),
               styles.taskButtonContainer
             )}
+            {task}
           />
         {/each}
       </div>
