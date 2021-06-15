@@ -1,6 +1,6 @@
 extern crate uuid;
 
-use crate::schema::users;
+use crate::schema::{projects, tasks, tasks_users, users};
 use serde::{Deserialize, Serialize};
 
 #[derive(Identifiable, Queryable, Deserialize, Serialize)]
@@ -36,4 +36,36 @@ pub struct NewUser {
     pub first_name: String,
     pub last_name: String,
     pub password: String,
+}
+
+#[derive(Identifiable, Queryable, Deserialize, Serialize)]
+#[table_name = "tasks"]
+pub struct Task {
+    pub id: uuid::Uuid,
+    pub name: String,
+    pub description: String,
+    pub project_id: Option<uuid::Uuid>,
+}
+
+#[derive(Insertable, Deserialize, Serialize)]
+#[table_name = "tasks"]
+pub struct NewTask {
+    pub name: String,
+    pub description: Option<String>,
+    pub project_id: Option<uuid::Uuid>,
+}
+
+#[derive(Insertable, Queryable, Deserialize, Serialize)]
+#[table_name = "tasks_users"]
+pub struct TaskUser {
+    pub task_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
+}
+
+#[derive(Identifiable, Queryable, Deserialize, Serialize)]
+#[table_name = "projects"]
+pub struct Project {
+    pub id: uuid::Uuid,
+    pub name: String,
+    pub description: String,
 }
