@@ -4,7 +4,7 @@
   @apply absolute; 
 
   left: 5rem;
-  top: calc(50% - 5rem);
+  top: 50%;
 
   @screen sm {
     @apply top-1/2 left-1/2;
@@ -16,26 +16,42 @@
 }
 
 $max-index: 5;
-$degree-margin: 10;
+$degree-margin: -25;
+$degree-margin-small: 0;
 $radius: 15rem;
-$radius-small: 12rem;
+$radius-small: 10rem;
+$height-difference: 6rem;
+$angle-shift: -90deg;
 
-$slope: math.div(90 + 2 * $degree-margin, 1 - $max-index);
 
 @for $index from 1 through $max-index {
   .taskButtonContainer.task#{$index} {
     @apply absolute;
-    $angle: $slope * $index * 1deg - $slope * $max-index - $degree-margin;
+    $slope: math.div(180 + 2 * $degree-margin-small, 1 - $max-index);
+    $exp-mod-1: -12 * math.pow(math.$e, -1000 * math.pow($index - 2, 2));
+    $exp-mod-2: 12 * math.pow(math.$e, -1000 * math.pow($index - 4, 2));
+    $angle: $slope * $index * 1deg - $slope * $max-index - $degree-margin-small
+      + $angle-shift + $exp-mod-1 + $exp-mod-2;
     transform: translate(
-      calc(#{$radius-small} * #{math.cos($angle)} - 50%),
-      calc(#{$radius-small} * #{math.sin($angle)} - 50%)
+      calc(0.75 * #{$radius-small} * #{math.cos(-$angle)} - 50%),
+      calc(1.5 * #{$radius-small} * #{math.sin(-$angle)} - 50%)
     );
 
     @screen sm {
+      $slope: math.div(180 + 2 * $degree-margin, 1 - $max-index);
+      $angle: $slope * $index * 1deg - $slope * $max-index - $degree-margin + $angle-shift;
       transform: translate(
-        calc(#{$radius} * #{math.cos($angle)} - 50%),
-        calc(#{$radius} * #{math.sin($angle)} - 50%)
+        calc(#{$radius} * #{math.cos(-$angle)} - 50%),
+        calc(#{$radius} * #{math.sin(-$angle)} - 50%)
       );
     }
   }
+
+  // .taskButtonContainer.task#{$index} {
+  //   @apply absolute;
+  //   transform: translate(
+  //     #{$radius-small},
+  //     calc(#{$height-difference} * #{$index - 1 - math.floor(math.div($max-index, 2))})
+  //   );
+  // }
 }

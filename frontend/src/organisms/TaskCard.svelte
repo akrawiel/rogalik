@@ -3,23 +3,23 @@
   import { nanoid } from 'nanoid';
 
   import RoundButton from '@/atoms/RoundButton.svelte';
-  import CloseIcon from '@/icons/CloseIcon.svelte';
-  import PlayIcon from '@/icons/PlayIcon.svelte';
   import trackingCanvasState, {
     onCardClose,
     onCardOpen,
   } from '@/store/trackingCanvas';
   import type { OpenCardData } from '@/store/trackingCanvas';
-  import type { Task } from '@/models/Task';
+  import { createEventDispatcher } from 'svelte';
 
   export let containerClass: string;
-  export let task: Task;
+  export let openOnClick = false;
 
   let isOpen = false;
   let cardElement: HTMLDivElement | undefined;
   let cardContainerElement: HTMLDivElement | undefined;
   let cardData: OpenCardData | undefined;
   let dummyCardElement: HTMLDivElement | undefined;
+
+  const dispatch = createEventDispatcher();
 
   function toggleIsOpen() {
     if (!cardElement) return;
@@ -33,10 +33,6 @@
     }
   }
 
-  function startTask() {
-    console.info('Task started');
-  }
-
   function onRightClick() {
     if (!isOpen) {
       toggleIsOpen();
@@ -44,10 +40,10 @@
   }
 
   function onClick() {
-    if (isOpen) {
+    if (isOpen || openOnClick) {
       toggleIsOpen();
     } else {
-      startTask();
+      dispatch('start');
     }
   }
 
@@ -81,13 +77,15 @@
   <div bind:this={cardElement} class={clsx('card', isOpen ? 'open' : '')}>
     <div class={clsx('button-container', isOpen ? 'open' : '')}>
       <RoundButton on:click={onClick} on:contextmenu={onRightClick} size="lg">
-        <svelte:component this={isOpen ? CloseIcon : PlayIcon} />
+        <slot name="icon" {isOpen} />
       </RoundButton>
     </div>
     <div class="card-header">
-      <div class="flex items-center p-2 h-full">{task.name}</div>
+      <div class="flex items-center p-2 h-full">
+        <slot name="header" />
+      </div>
     </div>
-    <div class="p-4">{task.description ?? 'No description available'}</div>
+    <slot />
   </div>
 </div>
 
@@ -104,7 +102,11 @@
   }
 
   .card:hover:not(.open) {
-    width: 12rem;
+    width: 16rem;
+
+    @screen sm {
+      width: 20rem;
+    }
   }
 
   .card {
@@ -121,11 +123,19 @@
     &.open {
       @apply shadow-md;
       height: 32rem;
-      width: 20rem;
+      width: 16rem;
+
+      @screen sm {
+        width: 20rem;
+      }
     }
 
     &.dummy {
       @apply hidden shadow-none;
+    }
+
+    @screen <sm {
+      width: 16rem;
     }
   }
 
@@ -139,7 +149,7 @@
   }
 
   .button-container {
-    @apply absolute top-0 left-0 button-container;
+    @apply absolute top-0 left-0;
     z-index: 2;
   }
 </style>

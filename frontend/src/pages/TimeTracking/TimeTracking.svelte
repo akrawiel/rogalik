@@ -3,7 +3,12 @@
 
   import RoundButton from '@/atoms/RoundButton.svelte';
   import TaskCard from '@/organisms/TaskCard.svelte';
+  import AddIcon from '@/icons/AddIcon.svelte';
+  import CloseIcon from '@/icons/CloseIcon.svelte';
+  import MoreIcon from '@/icons/MoreIcon.svelte';
   import PlayIcon from '@/icons/PlayIcon.svelte';
+  import ProjectIcon from '@/icons/ProjectIcon.svelte';
+  import type Task from '@/models/Task';
   import trackingCanvasState from '@/store/trackingCanvas';
 
   import styles from './TimeTracking.module.scss';
@@ -38,24 +43,17 @@
       name: 'tristique',
     },
     {
-      id: '8dcf64e9-98a1-4188-a75b-83f27cf95ddb',
-      name: 'nunc viverra dapibus',
-      description:
-        'interdum venenatis turpis enim blandit mi in porttitor pede justo eu massa donec dapibus duis at velit eu',
-      assigneeId: 'ebab3e42-9ba1-4418-a67a-5fd242f38550',
-    },
-    {
       id: '36dded23-1a91-4e2c-bc72-b5f906c766fe',
       name: 'magna',
       description:
         'sem sed sagittis nam congue risus semper porta volutpat quam pede lobortis ligula sit amet',
       assigneeId: '47a5be7e-d011-434e-99a9-78c20fc24694',
     },
-    {
-      id: 'c600f382-f55a-4efd-91cf-0868ce136318',
-      name: 'non sodales',
-    },
   ];
+
+  function onTaskStarted(task: Task) {
+    console.info('task started!', task);
+  }
 
   $: if (mainCanvas) {
     const mainCanvasBoundingRect = mainCanvas.getBoundingClientRect();
@@ -86,18 +84,56 @@
       bind:this={innerCanvas}
     >
       <RoundButton size="xxl">
-        <PlayIcon />
+        <div class="p-4">
+          <ProjectIcon />
+        </div>
       </RoundButton>
       <div class={styles.tasksContainer}>
         {#each tasks as task, taskIndex}
           <TaskCard
             containerClass={clsx(
-              getTaskButtonClassForIndex(taskIndex),
+              getTaskButtonClassForIndex(taskIndex + 1),
               styles.taskButtonContainer
             )}
-            {task}
-          />
+            on:start={() => onTaskStarted(task)}
+          >
+            <svelte:fragment slot="header">{task.name}</svelte:fragment>
+            <svelte:fragment slot="icon" let:isOpen>
+              <svelte:component this={isOpen ? CloseIcon : PlayIcon} />
+            </svelte:fragment>
+            <div class="p-4">
+              {task.description ?? 'No description available'}
+            </div>
+          </TaskCard>
         {/each}
+        <TaskCard
+          containerClass={clsx(
+            getTaskButtonClassForIndex(0),
+            styles.taskButtonContainer
+          )}
+          openOnClick
+        >
+          <svelte:fragment slot="header">Add task</svelte:fragment>
+          <svelte:fragment slot="icon" let:isOpen>
+            <div class="p-2">
+              <svelte:component this={isOpen ? CloseIcon : AddIcon} />
+            </div>
+          </svelte:fragment>
+          <div class="p-4">Add task content</div>
+        </TaskCard>
+        <TaskCard
+          containerClass={clsx(
+            getTaskButtonClassForIndex(4),
+            styles.taskButtonContainer
+          )}
+          openOnClick
+        >
+          <svelte:fragment slot="header">More tasks</svelte:fragment>
+          <svelte:fragment slot="icon" let:isOpen>
+            <svelte:component this={isOpen ? CloseIcon : MoreIcon} />
+          </svelte:fragment>
+          <div class="p-4">Tasks list</div>
+        </TaskCard>
       </div>
     </div>
   </div>
@@ -116,5 +152,11 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(1);
     transition: all 0.25s ease-out;
+  }
+
+  .button-container {
+    @apply absolute w-0 h-0;
+    transform: translate(-2.25rem, -2.25rem);
+    z-index: 2;
   }
 </style>
