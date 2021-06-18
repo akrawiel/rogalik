@@ -1,0 +1,2 @@
+ALTER TABLE tasks
+ALTER COLUMN project_id SET NULL;

@@ -44,13 +44,21 @@ pub struct Task {
     pub id: uuid::Uuid,
     pub name: String,
     pub description: String,
-    pub project_id: Option<uuid::Uuid>,
+    pub project_id: uuid::Uuid,
 }
 
 #[derive(Insertable, Deserialize, Serialize)]
 #[table_name = "tasks"]
 pub struct NewTask {
     pub name: String,
+    pub description: Option<String>,
+    pub project_id: uuid::Uuid,
+}
+
+#[derive(AsChangeset, Insertable, Deserialize, Serialize)]
+#[table_name = "tasks"]
+pub struct EditedTask {
+    pub name: Option<String>,
     pub description: Option<String>,
     pub project_id: Option<uuid::Uuid>,
 }
@@ -68,4 +76,18 @@ pub struct Project {
     pub id: uuid::Uuid,
     pub name: String,
     pub description: String,
+}
+
+#[derive(Insertable, Deserialize, Serialize)]
+#[table_name = "projects"]
+pub struct NewProject {
+    pub name: String,
+    pub description: Option<String>,
+}
+
+#[derive(AsChangeset, Insertable, Deserialize, Serialize)]
+#[table_name = "projects"]
+pub struct EditedProject {
+    pub name: Option<String>,
+    pub description: Option<String>,
 }

@@ -11,7 +11,7 @@ table! {
         id -> Uuid,
         name -> Text,
         description -> Text,
-        project_id -> Nullable<Uuid>,
+        project_id -> Uuid,
     }
 }
 

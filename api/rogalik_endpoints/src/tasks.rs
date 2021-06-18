@@ -6,7 +6,7 @@ use rocket_contrib::json::Json;
 use rogalik_db::{
     diesel,
     diesel::prelude::*,
-    models::{NewTask, Task},
+    models::{EditedTask, NewTask, Task},
     schema::tasks,
     DbConn,
 };
@@ -55,13 +55,47 @@ fn add(conn: DbConn, new_task: Option<Json<NewTask>>) -> Custom<Result<Json<Task
         )
 }
 
-#[delete("/<id>")]
-fn delete(conn: DbConn, id: Option<String>) -> Custom<&'static str> {
-    if id.is_none() {
-        return Custom(Status::BadRequest, "Task ID not provided");
+#[patch("/<id>", format = "application/json", data = "<edited_task>")]
+fn edit(
+    conn: DbConn,
+    edited_task: Option<Json<EditedTask>>,
+    id: String,
+) -> Custom<Result<Json<Task>, &'static str>> {
+    if edited_task.is_none() {
+        return Custom(Status::BadRequest, Err("Invalid data provided"));
     }
 
-    let parsed_id = Uuid::from_str(id.unwrap().as_str());
+    let parsed_id = Uuid::from_str(id.as_str());
+
+    if parsed_id.is_err() {
+        return Custom(Status::UnprocessableEntity, Err("Invalid task ID provided"));
+    }
+
+    let parsed_task = edited_task.unwrap().into_inner();
+
+    diesel::update(tasks::table.find(parsed_id.unwrap()))
+        .set(&parsed_task)
+        .returning((
+            tasks::id,
+            tasks::name,
+            tasks::description,
+            tasks::project_id,
+        ))
+        .get_result(&*conn)
+        .map_or_else(
+            |_| {
+                Custom(
+                    Status::InternalServerError,
+                    Err("Error adding the user, try again later"),
+                )
+            },
+            |created_task: Task| Custom(Status::Created, Ok(Json(created_task))),
+        )
+}
+
+#[delete("/<id>")]
+fn delete(conn: DbConn, id: String) -> Custom<&'static str> {
+    let parsed_id = Uuid::from_str(id.as_str());
 
     if parsed_id.is_err() {
         return Custom(Status::UnprocessableEntity, "Invalid task ID provided");
@@ -84,6 +118,31 @@ fn delete(conn: DbConn, id: Option<String>) -> Custom<&'static str> {
     Custom(Status::NoContent, "")
 }
 
+#[get("/<id>")]
+fn get_task(conn: DbConn, id: String) -> Custom<Result<Json<Task>, &'static str>> {
+    let parsed_id = Uuid::from_str(id.as_str());
+
+    if parsed_id.is_err() {
+        return Custom(Status::UnprocessableEntity, Err("Invalid task ID provided"));
+    }
+
+    let task = tasks::table
+        .find(parsed_id.unwrap())
+        .select((
+            tasks::id,
+            tasks::name,
+            tasks::description,
+            tasks::project_id,
+        ))
+        .first(&*conn);
+
+    if task.is_err() {
+        return Custom(Status::NotFound, Err("Task not found"));
+    }
+
+    Custom(Status::Ok, Ok(Json(task.unwrap())))
+}
+
 pub fn get_routes() -> Vec<Route> {
-    routes![index, add, delete]
+    routes![index, add, edit, delete, get_task]
 }
